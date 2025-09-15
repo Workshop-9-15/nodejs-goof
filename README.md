@@ -146,6 +146,37 @@ http://localhost:3001/login?redirectPage="><script>alert(1)</script>
 
 To exploit the open redirect, simply provide a URL such as `redirectPage=https://google.com` which exploits the fact that the code doesn't enforce local URLs in `index.js:72`.
 
+#### Security Fix: Open Redirect Vulnerability
+
+**Status: FIXED** - The open redirect vulnerability in the `adminLoginSuccess` function has been addressed with proper URL validation.
+
+**Fix Implementation:**
+- Added `isValidRedirectUrl()` function that validates redirect URLs before processing
+- Only allows relative URLs starting with `/` (e.g., `/admin`, `/dashboard`)
+- Rejects external URLs containing `://` (e.g., `https://evil.com`)
+- Defaults to `/admin` for invalid or missing redirect URLs
+
+**Code Changes:**
+```js
+function isValidRedirectUrl(url) {
+  return url && typeof url === 'string' && url.startsWith('/') && !url.includes('://');
+}
+
+function adminLoginSuccess(redirectPage, session, username, res) {
+  session.loggedIn = 1
+  console.log(`User logged in: ${username}`)
+  
+  if (redirectPage && isValidRedirectUrl(redirectPage)) {
+      return res.redirect(redirectPage)
+  } else {
+      // If redirectPage is invalid or missing, default to /admin
+      return res.redirect('/admin')
+  }
+}
+```
+
+This fix prevents attackers from redirecting users to external malicious sites while maintaining legitimate internal navigation functionality.
+
 #### Hardcoded values - session information
 
 The application initializes a cookie-based session on `app.js:40` as follows:
