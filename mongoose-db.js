@@ -9,12 +9,12 @@ const Todo = new Schema({
 
 mongoose.model('Todo', Todo);
 
-const User = new Schema({
+const UserSchema = new Schema({
   username: String,
   password: String,
 });
 
-mongoose.model('User', User);
+mongoose.model('User', UserSchema);
 
 // CloudFoundry env const s
 const mongoCFUri = cfenv.getAppEnv().getServiceURL('goof-mongo');
@@ -42,7 +42,7 @@ console.log("Using Mongo URI " + mongoUri);
 
 mongoose.connect(mongoUri);
 
-User = mongoose.model('User');
+const User = mongoose.model('User');
 User.find({ username: 'admin@snyk.io' }).exec(function (err, users) {
   console.log(users);
   if (users.length === 0) {
