@@ -1,42 +1,40 @@
-var mongoose = require('mongoose');
-var cfenv = require("cfenv");
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const cfenv = require("cfenv");
+const Schema = mongoose.Schema;
 
-var Todo = new Schema({
+const Todo = new Schema({
   content: Buffer,
   updated_at: Date,
 });
 
 mongoose.model('Todo', Todo);
 
-var User = new Schema({
+const UserSchema = new Schema({
   username: String,
   password: String,
 });
 
-mongoose.model('User', User);
+mongoose.model('User', UserSchema);
 
-// CloudFoundry env vars
-var mongoCFUri = cfenv.getAppEnv().getServiceURL('goof-mongo');
+// CloudFoundry env const s
+const mongoCFUri = cfenv.getAppEnv().getServiceURL('goof-mongo');
 console.log(JSON.stringify(cfenv.getAppEnv()));
 
 // Default Mongo URI is local
 const DOCKER = process.env.DOCKER
+let mongoUri;
 if (DOCKER === '1') {
-  var mongoUri = 'mongodb://goof-mongo/express-todo';
+  mongoUri = 'mongodb://goof-mongo/express-todo';
 } else {
-  var mongoUri = 'mongodb://localhost/express-todo';
+  mongoUri = 'mongodb://localhost/express-todo';
 }
-
 
 // CloudFoundry Mongo URI
 if (mongoCFUri) {
   mongoUri = mongoCFUri;
 } else if (process.env.MONGOLAB_URI) {
-  // Generic (plus Heroku) env var support
   mongoUri = process.env.MONGOLAB_URI;
 } else if (process.env.MONGODB_URI) {
-  // Generic (plus Heroku) env var support
   mongoUri = process.env.MONGODB_URI;
 }
 
@@ -44,7 +42,7 @@ console.log("Using Mongo URI " + mongoUri);
 
 mongoose.connect(mongoUri);
 
-User = mongoose.model('User');
+const User = mongoose.model('User');
 User.find({ username: 'admin@snyk.io' }).exec(function (err, users) {
   console.log(users);
   if (users.length === 0) {

@@ -1,5 +1,5 @@
-var typeorm = require("typeorm");
-var EntitySchema = typeorm.EntitySchema;
+const typeorm = require("typeorm");
+const EntitySchema = typeorm.EntitySchema;
 
 const Users = require("./entity/Users")
 

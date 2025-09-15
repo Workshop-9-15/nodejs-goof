@@ -5,10 +5,10 @@ module.exports = {
   },
 
   uid : function ( len ){
-    var str     = '';
-    var src     = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var src_len = src.length;
-    var i       = len;
+    let str     = '';
+    const src     = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const src_len = src.length;
+    let i       = len;
 
     for( ; i-- ; ){
       str += src.charAt( this.ran_no( 0, src_len - 1 ));
@@ -18,7 +18,7 @@ module.exports = {
   },
 
   forbidden : function ( res ){
-    var body       = 'Forbidden';
+    const body       = 'Forbidden';
     res.statusCode = 403;
 
     res.setHeader( 'Content-Type', 'text/plain' );
