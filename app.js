@@ -6,28 +6,28 @@
 require('./mongoose-db');
 require('./typeorm-db')
 
-var st = require('st');
-var crypto = require('crypto');
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var ejsEngine = require('ejs-locals');
-var bodyParser = require('body-parser');
-var session = require('express-session')
-var methodOverride = require('method-override');
-var logger = require('morgan');
-var errorHandler = require('errorhandler');
-var optional = require('optional');
-var marked = require('marked');
-var fileUpload = require('express-fileupload');
-var dust = require('dustjs-linkedin');
-var dustHelpers = require('dustjs-helpers');
-var cons = require('consolidate');
+const st = require('st');
+const crypto = require('crypto');
+const express = require('express');
+const http = require('http');
+const path = require('path');
+const ejsEngine = require('ejs-locals');
+const bodyParser = require('body-parser');
+const session = require('express-session')
+const methodOverride = require('method-override');
+const logger = require('morgan');
+const errorHandler = require('errorhandler');
+const optional = require('optional');
+const marked = require('marked');
+const fileUpload = require('express-fileupload');
+const dust = require('dustjs-linkedin');
+const dustHelpers = require('dustjs-helpers');
+const cons = require('consolidate');
 const hbs = require('hbs')
 
-var app = express();
-var routes = require('./routes');
-var routesUsers = require('./routes/users.js')
+const app = express();
+const routes = require('./routes');
+const routesUsers = require('./routes/users.js')
 
 // all environments
 app.set('port', process.env.PORT || 3001);
@@ -40,9 +40,9 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(methodOverride());
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET || 'keyboard cat',
   name: 'connect.sid',
-  cookie: { path: '/' }
+  cookie: { path: '/', httpOnly: true }
 }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -80,7 +80,7 @@ if (app.get('env') == 'development') {
   app.use(errorHandler());
 }
 
-var token = 'SECRET_TOKEN_f8ed84e8f41e4146403dd4a6bbcea5e418d23a9';
+const token = 'SECRET_TOKEN_f8ed84e8f41e4146403dd4a6bbcea5e418d23a9';
 console.log('token: ' + token);
 
 http.createServer(app).listen(app.get('port'), function () {

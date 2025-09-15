@@ -1,8 +1,8 @@
 
-var express = require('express')
-var typeorm = require("typeorm");
+const express = require('express')
+const typeorm = require("typeorm");
 
-var router = express.Router()
+const router = express.Router()
 module.exports = router
 
 router.get('/', async (req, res, next) => {
