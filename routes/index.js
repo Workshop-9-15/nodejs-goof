@@ -15,6 +15,8 @@ const validator = require('validator');
 const fileType = require('file-type');
 const AdmZip = require('adm-zip');
 const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
 // prototype-pollution
 const _ = require('lodash');
@@ -280,7 +282,7 @@ exports.import = function (req, res, next) {
   }
   if (importedFileType["mime"] === zipFileExt["mime"]) {
     const zip = AdmZip(importFile.data);
-    const extracted_path = "/tmp/extracted_files";
+    const extracted_path = path.join(os.tmpdir(), 'goof_extracted_files_' + Date.now());
     
     const entries = zip.getEntries();
     let hasValidEntries = true;
