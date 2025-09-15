@@ -51,13 +51,17 @@ exports.loginHandler = function (req, res, next) {
   }
 };
 
+function isValidRedirectUrl(url) {
+  return url && typeof url === 'string' && url.startsWith('/') && !url.includes('://');
+}
+
 function adminLoginSuccess(redirectPage, session, username, res) {
   session.loggedIn = 1
 
   // Log the login action for audit
   console.log(`User logged in: ${username}`)
 
-  if (redirectPage) {
+  if (redirectPage && isValidRedirectUrl(redirectPage)) {
       return res.redirect(redirectPage)
   } else {
       return res.redirect('/admin')
